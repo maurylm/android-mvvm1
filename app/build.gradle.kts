@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -53,10 +55,17 @@ dependencies {
     // Retrofit
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
-    // Corutinas
+    // Coroutines
     implementation(libs.kotlinx.coroutines.core)
+    // Dagger Hilt
+    implementation(libs.hilt.android.v2511)
+    kapt(libs.hilt.compiler)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+}
+
+kapt {
+    correctErrorTypes = true
 }

@@ -10,10 +10,13 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.example.mvvm.databinding.ActivityMainBinding
 import com.example.mvvm.ui.viewmodel.QuoteViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+
     private val quoteViewModel: QuoteViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,13 +27,13 @@ class MainActivity : AppCompatActivity() {
 
         quoteViewModel.onCreate()
 
-        quoteViewModel.quoteModel.observe(this, Observer{ currentQuote ->
-            binding.tvQuote.text = currentQuote.quote
-            binding.tvAuthor.text = currentQuote.author
+        quoteViewModel.quoteModel.observe(this, Observer{
+            binding.tvQuote.text = it.quote
+            binding.tvAuthor.text = it.author
         })
 
-        quoteViewModel.isLoading.observe(this, Observer{ isLoading ->
-            binding.progressBar.isVisible = isLoading
+        quoteViewModel.isLoading.observe(this, Observer{
+            binding.progressBar.isVisible = it
         })
 
         binding.viewContainer.setOnClickListener {
