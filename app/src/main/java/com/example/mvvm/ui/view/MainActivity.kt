@@ -4,10 +4,7 @@ import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
-import androidx.lifecycle.Observer
 import com.example.mvvm.databinding.ActivityMainBinding
 import com.example.mvvm.ui.viewmodel.QuoteViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,14 +24,17 @@ class MainActivity : AppCompatActivity() {
 
         quoteViewModel.onCreate()
 
-        quoteViewModel.quoteModel.observe(this, Observer{
-            binding.tvQuote.text = it.quote
-            binding.tvAuthor.text = it.author
-        })
+        quoteViewModel.quoteModel.observe(this) {
+            if(it != null) {
+                binding.tvQuote.text = it.quote
+                binding.tvAuthor.text = it.author
+            }
 
-        quoteViewModel.isLoading.observe(this, Observer{
+        }
+
+        quoteViewModel.isLoading.observe(this) {
             binding.progressBar.isVisible = it
-        })
+        }
 
         binding.viewContainer.setOnClickListener {
             quoteViewModel.getRandomQuote()

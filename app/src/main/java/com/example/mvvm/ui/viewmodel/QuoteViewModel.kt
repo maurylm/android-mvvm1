@@ -3,9 +3,9 @@ package com.example.mvvm.ui.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.mvvm.data.model.QuoteModel
 import com.example.mvvm.domain.GetQuotesUseCase
 import com.example.mvvm.domain.GetRandomQuoteUseCase
+import com.example.mvvm.domain.model.Quote
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -16,7 +16,7 @@ class QuoteViewModel @Inject constructor(
     private val getRandomQuoteUseCase: GetRandomQuoteUseCase
 ) : ViewModel() {
 
-    val quoteModel = MutableLiveData<QuoteModel>()
+    val quoteModel = MutableLiveData<Quote>()
     val isLoading = MutableLiveData<Boolean>()
 
     fun onCreate() {
@@ -24,7 +24,7 @@ class QuoteViewModel @Inject constructor(
             isLoading.postValue(true)
             val result = getQuotesUseCase()
 
-            if (!result.isNullOrEmpty()) {
+            if (result.isNotEmpty()) {
                 quoteModel.postValue(result[0])
                 isLoading.postValue(false)
             }
@@ -32,12 +32,12 @@ class QuoteViewModel @Inject constructor(
     }
 
     fun getRandomQuote() {
-        isLoading.postValue(true)
-        val quote = getRandomQuoteUseCase()
-        if (quote != null) {
-            quoteModel.postValue(quote)
+        viewModelScope.launch {
+            isLoading.postValue(true)
+            val quote = getRandomQuoteUseCase()
+            if (quote != null) quoteModel.postValue(quote)
+            isLoading.postValue(false)
         }
-        isLoading.postValue(false)
     }
 
 }

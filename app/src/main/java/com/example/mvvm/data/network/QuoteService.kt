@@ -1,6 +1,5 @@
 package com.example.mvvm.data.network
 
-import com.example.mvvm.core.RetrofitHelper
 import com.example.mvvm.data.model.QuoteModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
